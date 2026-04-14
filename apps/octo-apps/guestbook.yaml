@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "example.guestbook"
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argo.octopus.com/project: "argo-stuff"
+    argo.octopus.com/environment: "dev"
+spec:
+  destination:
+    namespace: "guestbook"
+    server: "https://kubernetes.default.svc"
+  project: default
+  source:
+    path: "guestbook"
+    repoURL: https://github.com/evolutionise/argocd-example-apps
+    targetRevision: master
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
